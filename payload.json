@@ -1,0 +1,9 @@
+{
+  "max_tokens": 512,
+  "messages": [
+    {
+      "content": "Describe in detail what a large language model is ### Response: ",
+      "role": "user"
+    }
+  ]
+}
