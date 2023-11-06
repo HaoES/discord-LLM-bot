@@ -2,6 +2,13 @@ import aiohttp
 import asyncio
 import json
 import discord
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
+TOKEN = os.getenv("TOKEN")
+
 
 API_URL = "http://localhost:8000/v1/chat/completions"
 headers = {"Content-Type": "application/json"}
@@ -23,12 +30,11 @@ class MyClient(discord.Client):
 
         if message.content.startswith('!ai'):
             stripped_msg = str(message.content).replace('!ai','').strip()
-            prompt = input("User: ")
-            message = {
-              "content": f"{prompt} ### Response: ",
+            prompt_msg = {
+              "content": f"{stripped_msg} ### Response: ",
               "role": "user"
             }
-            payload["messages"].append(message)
+            payload["messages"].append(prompt_msg)
 
             async with aiohttp.ClientSession() as session:
                 async with session.post(API_URL, data = json.dumps(payload), headers=headers) as resp:
@@ -36,7 +42,7 @@ class MyClient(discord.Client):
                     reply_content = reply["choices"][0]["message"]["content"]
                     await message.reply(reply_content, mention_author=True)
 
-            msg_idx = payload["messages"].index(message)
+            msg_idx = payload["messages"].index(prompt_msg)
             payload["messages"][msg_idx]["content"] += reply_content
 
 
@@ -44,4 +50,4 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 client = MyClient(intents=intents)
-client.run('token')
+client.run(TOKEN)
