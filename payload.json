@@ -1,8 +1,8 @@
 {
-  "max_tokens": 512,
+  "max_tokens":512,
   "messages": [
     {
-      "content": "Describe in detail what a large language model is ### Response: ",
+      "content": "Tell me what quantum physics is about? ### Response: ",
       "role": "user"
     }
   ]
